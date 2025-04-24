@@ -30,12 +30,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -306,14 +300,13 @@ export default function JobsPage() {
                     <TableHead>Location</TableHead>
                     <TableHead>Experience</TableHead>
                     <TableHead>Skills</TableHead>
-                    <TableHead>Posted Date</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>Updated Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredJobs.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8">
+                      <TableCell colSpan={6} className="text-center py-8">
                         No job listings found matching your criteria
                       </TableCell>
                     </TableRow>
@@ -321,60 +314,28 @@ export default function JobsPage() {
                     filteredJobs.map((job) => (
                       <TableRow key={job.id}>
                         <TableCell className="font-medium">
-                          {job.job_title}
-                          <div className="text-xs text-muted-foreground mt-1">
-                            {job.job_family}
-                          </div>
-                        </TableCell>
-                        <TableCell>{job.company}</TableCell>
-                        <TableCell>{job.job_location}</TableCell>
-                        <TableCell>
-                          {job.min_years_required ? (
-                            <span>{job.min_years_required}+ years required</span>
-                          ) : job.min_years_preferred ? (
-                            <span>{job.min_years_preferred}+ years preferred</span>
-                          ) : (
-                            <span>Not specified</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1 max-w-[300px]">
-                            {job.skills_required && job.skills_required.slice(0, 3).map((skill, idx) => (
-                              <span key={idx} className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
-                                {skill}
-                              </span>
-                            ))}
-                            {job.skills_required && job.skills_required.length > 3 && (
-                              <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-secondary text-secondary-foreground">
-                                +{job.skills_required.length - 3} more
-                              </span>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>{formatDate(job.info_extract_date)}</TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                Actions
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem asChild>
-                                <a 
-                                  href={job.url} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="cursor-pointer"
-                                >
-                                  View Job
-                                </a>
-                              </DropdownMenuItem>
+                          <div className="flex flex-col space-y-2">
+                            <div>
+                              {job.job_title}
+                              <div className="text-xs text-muted-foreground mt-1">
+                                {job.job_family}
+                              </div>
+                            </div>
+                            <div>
+                              <a 
+                                href={job.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                              >
+                                <Button size="sm" variant="secondary">
+                                  Apply
+                                </Button>
+                              </a>
                               <Dialog>
                                 <DialogTrigger asChild>
-                                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                    View Details
-                                  </DropdownMenuItem>
+                                  <Button variant="ghost" size="sm" className="ml-2">
+                                    Details
+                                  </Button>
                                 </DialogTrigger>
                                 <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                                   <DialogHeader>
@@ -485,9 +446,35 @@ export default function JobsPage() {
                                   </div>
                                 </DialogContent>
                               </Dialog>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                            </div>
+                          </div>
                         </TableCell>
+                        <TableCell>{job.company}</TableCell>
+                        <TableCell>{job.job_location}</TableCell>
+                        <TableCell>
+                          {job.min_years_required ? (
+                            <span>{job.min_years_required}+ years required</span>
+                          ) : job.min_years_preferred ? (
+                            <span>{job.min_years_preferred}+ years preferred</span>
+                          ) : (
+                            <span>Not specified</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1 max-w-[300px]">
+                            {job.skills_required && job.skills_required.slice(0, 3).map((skill, idx) => (
+                              <span key={idx} className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                                {skill}
+                              </span>
+                            ))}
+                            {job.skills_required && job.skills_required.length > 3 && (
+                              <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-secondary text-secondary-foreground">
+                                +{job.skills_required.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>{formatDate(job.info_extract_date)}</TableCell>
                       </TableRow>
                     ))
                   )}
