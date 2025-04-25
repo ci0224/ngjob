@@ -89,7 +89,12 @@ export default function JobsPage() {
 
   // Apply filters when filters state changes
   useEffect(() => {
-    setFilteredJobs(filterJobs(jobs, filters));
+    const filtered = filterJobs(jobs, filters);
+    // Sort by date (newer first)
+    const sorted = [...filtered].sort((a, b) => 
+      new Date(b.info_extract_date).getTime() - new Date(a.info_extract_date).getTime()
+    );
+    setFilteredJobs(sorted);
   }, [jobs, filters]);
 
   // Handle filter changes
