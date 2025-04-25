@@ -22,14 +22,6 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -294,204 +286,199 @@ export default function JobsPage() {
       ) : error ? (
         <div className="text-center text-destructive p-8">{error}</div>
       ) : (
-        <Card>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[300px]">Position</TableHead>
-                    <TableHead>Company</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Experience</TableHead>
-                    <TableHead>Skills</TableHead>
-                    <TableHead>Updated Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredJobs.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8">
-                        No job listings found matching your criteria
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    filteredJobs.map((job) => (
-                      <TableRow key={job.id}>
-                        <TableCell className="font-medium">
-                          <div className="flex flex-col space-y-2">
-                            <div>
-                              {job.job_title}
-                              <div className="text-xs text-muted-foreground mt-1">
-                                {job.job_family}
-                              </div>
-                            </div>
-                            <div>
-                              <a 
-                                href={job.url} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                              >
-                                <Button size="sm" variant="secondary">
-                                  Apply
-                                </Button>
-                              </a>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button variant="ghost" size="sm" className="ml-2">
-                                    Details
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-                                  <DialogHeader>
-                                    <DialogTitle>{job.job_title}</DialogTitle>
-                                    <DialogDescription>
-                                      {job.company} • {job.job_location}
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <div className="grid gap-4 py-4">
+        <div>
+          {filteredJobs.length === 0 ? (
+            <Card>
+              <CardContent className="text-center py-2">
+                No job listings found matching your criteria
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredJobs.map((job) => (
+                <Card key={job.id} className="h-full">
+                  <CardContent className="">
+                    <div className="flex flex-col space-y-2">
+                      <div>
+                        <h3 className="text-base font-semibold line-clamp-2">{job.job_title}</h3>
+                        <p className="text-xs text-muted-foreground">{job.company}</p>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="flex flex-col">
+                          <span className="font-medium">Location</span>
+                          <span className="text-muted-foreground line-clamp-1">{job.job_location}</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-medium">Experience</span>
+                          <span className="text-muted-foreground line-clamp-1">
+                            {job.min_years_required ? 
+                              `${job.min_years_required}+ years` : 
+                              job.min_years_preferred ? 
+                                `${job.min_years_preferred}+ years` : 
+                                "Not specified"}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium text-xs mb-1">Skills</p>
+                        <div className="flex flex-wrap gap-1">
+                          {job.skills_required && job.skills_required.slice(0, 3).map((skill, idx) => (
+                            <span key={idx} className="inline-flex items-center px-1.5 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                              {skill}
+                            </span>
+                          ))}
+                          {job.skills_required && job.skills_required.length > 3 && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 text-xs font-medium rounded-full bg-secondary text-secondary-foreground">
+                              +{job.skills_required.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center mt-1">
+                        <div className="text-xs text-muted-foreground">
+                          {formatDate(job.info_extract_date)}
+                        </div>
+                        <div className="flex space-x-1">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm" className="h-7 px-2 text-xs">
+                                Details
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>{job.job_title}</DialogTitle>
+                                <DialogDescription>
+                                  {job.company} • {job.job_location}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4 py-4">
+                                <div>
+                                  <h3 className="text-lg font-medium">Job Details</h3>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                     <div>
-                                      <h3 className="text-lg font-medium">Job Details</h3>
-                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                        <div>
-                                          <p className="text-sm font-medium">Job Family</p>
-                                          <p className="text-sm">{job.job_family || "Not specified"}</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium">Experience Required</p>
-                                          <p className="text-sm">
-                                            {job.min_years_required ? 
-                                              `${job.min_years_required} - ${job.max_years_required || 'any'} years` : 
-                                              "Not specified"}
-                                          </p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium">Experience Preferred</p>
-                                          <p className="text-sm">
-                                            {job.min_years_preferred ? 
-                                              `${job.min_years_preferred} - ${job.max_years_preferred || 'any'} years` : 
-                                              "Not specified"}
-                                          </p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium">Degree</p>
-                                          <p className="text-sm">
-                                            {job.degree_required ? 
-                                              `Required: ${job.degree_required}` : 
-                                              job.degree_preferred ? 
-                                                `Preferred: ${job.degree_preferred}` : 
-                                                "Not specified"}
-                                          </p>
-                                        </div>
-                                      </div>
+                                      <p className="text-sm font-medium">Job Family</p>
+                                      <p className="text-sm">{job.job_family || "Not specified"}</p>
                                     </div>
-                                    
                                     <div>
-                                      <h3 className="text-lg font-medium">Skills</h3>
-                                      <div className="mt-2">
-                                        <p className="text-sm font-medium">Required Skills</p>
-                                        <div className="flex flex-wrap gap-1 mt-1">
-                                          {job.skills_required && job.skills_required.length > 0 ? (
-                                            job.skills_required.map((skill, idx) => (
-                                              <span 
-                                                key={idx} 
-                                                className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
-                                              >
-                                                {skill}
-                                              </span>
-                                            ))
-                                          ) : (
-                                            <span className="text-sm text-muted-foreground">None specified</span>
-                                          )}
-                                        </div>
-                                      </div>
-                                      <div className="mt-2">
-                                        <p className="text-sm font-medium">Preferred Skills</p>
-                                        <div className="flex flex-wrap gap-1 mt-1">
-                                          {job.skills_preferred && job.skills_preferred.length > 0 ? (
-                                            job.skills_preferred.map((skill, idx) => (
-                                              <span 
-                                                key={idx} 
-                                                className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-secondary text-secondary-foreground"
-                                              >
-                                                {skill}
-                                              </span>
-                                            ))
-                                          ) : (
-                                            <span className="text-sm text-muted-foreground">None specified</span>
-                                          )}
-                                        </div>
-                                      </div>
+                                      <p className="text-sm font-medium">Experience Required</p>
+                                      <p className="text-sm">
+                                        {job.min_years_required ? 
+                                          `${job.min_years_required} - ${job.max_years_required || 'any'} years` : 
+                                          "Not specified"}
+                                      </p>
                                     </div>
-                                    
                                     <div>
-                                      <h3 className="text-lg font-medium">Additional Information</h3>
-                                      <div className="mt-2">
-                                        <p className="text-sm">
-                                          Listed: {formatDate(job.info_extract_date)}
-                                        </p>
-                                        {job.extracted && (
-                                          <div className="mt-4 p-4 bg-muted rounded-md">
-                                            <p className="text-sm whitespace-pre-line">{job.extracted}</p>
-                                          </div>
-                                        )}
-                                      </div>
+                                      <p className="text-sm font-medium">Experience Preferred</p>
+                                      <p className="text-sm">
+                                        {job.min_years_preferred ? 
+                                          `${job.min_years_preferred} - ${job.max_years_preferred || 'any'} years` : 
+                                          "Not specified"}
+                                      </p>
                                     </div>
-                                    
-                                    <div className="mt-2 flex justify-end">
-                                      <a 
-                                        href={job.url} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-                                      >
-                                        Apply on Company Website
-                                      </a>
+                                    <div>
+                                      <p className="text-sm font-medium">Degree</p>
+                                      <p className="text-sm">
+                                        {job.degree_required ? 
+                                          `Required: ${job.degree_required}` : 
+                                          job.degree_preferred ? 
+                                            `Preferred: ${job.degree_preferred}` : 
+                                            "Not specified"}
+                                      </p>
                                     </div>
                                   </div>
-                                </DialogContent>
-                              </Dialog>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>{job.company}</TableCell>
-                        <TableCell>{job.job_location}</TableCell>
-                        <TableCell>
-                          {job.min_years_required ? (
-                            <span>{job.min_years_required}+ years required</span>
-                          ) : job.min_years_preferred ? (
-                            <span>{job.min_years_preferred}+ years preferred</span>
-                          ) : (
-                            <span>Not specified</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1 max-w-[300px]">
-                            {job.skills_required && job.skills_required.slice(0, 3).map((skill, idx) => (
-                              <span key={idx} className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
-                                {skill}
-                              </span>
-                            ))}
-                            {job.skills_required && job.skills_required.length > 3 && (
-                              <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-secondary text-secondary-foreground">
-                                +{job.skills_required.length - 3} more
-                              </span>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>{formatDate(job.info_extract_date)}</TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
+                                </div>
+                                
+                                <div>
+                                  <h3 className="text-lg font-medium">Skills</h3>
+                                  <div className="mt-2">
+                                    <p className="text-sm font-medium">Required Skills</p>
+                                    <div className="flex flex-wrap gap-1 mt-1">
+                                      {job.skills_required && job.skills_required.length > 0 ? (
+                                        job.skills_required.map((skill, idx) => (
+                                          <span 
+                                            key={idx} 
+                                            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
+                                          >
+                                            {skill}
+                                          </span>
+                                        ))
+                                      ) : (
+                                        <span className="text-sm text-muted-foreground">None specified</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="mt-2">
+                                    <p className="text-sm font-medium">Preferred Skills</p>
+                                    <div className="flex flex-wrap gap-1 mt-1">
+                                      {job.skills_preferred && job.skills_preferred.length > 0 ? (
+                                        job.skills_preferred.map((skill, idx) => (
+                                          <span 
+                                            key={idx} 
+                                            className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-secondary text-secondary-foreground"
+                                          >
+                                            {skill}
+                                          </span>
+                                        ))
+                                      ) : (
+                                        <span className="text-sm text-muted-foreground">None specified</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h3 className="text-lg font-medium">Additional Information</h3>
+                                  <div className="mt-2">
+                                    <p className="text-sm">
+                                      Listed: {formatDate(job.info_extract_date)}
+                                    </p>
+                                    {job.extracted && (
+                                      <div className="mt-4 p-4 bg-muted rounded-md">
+                                        <p className="text-sm whitespace-pre-line">{job.extracted}</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                
+                                <div className="mt-2 flex justify-end">
+                                  <a 
+                                    href={job.url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                                  >
+                                    Apply on Company Website
+                                  </a>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                          <a 
+                            href={job.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            <Button size="sm" variant="default" className="h-7 px-2 text-xs">
+                              Apply
+                            </Button>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-            
-            <div className="p-4 text-sm text-muted-foreground">
-              Showing {filteredJobs.length} of {jobs.length} job listings
-            </div>
-          </CardContent>
-        </Card>
+          )}
+          
+          <div className="mt-4 text-sm text-muted-foreground">
+            Showing {filteredJobs.length} of {jobs.length} job listings
+          </div>
+        </div>
       )}
     </main>
   );
