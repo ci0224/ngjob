@@ -151,10 +151,25 @@ export default function JobsPage() {
     <main className="container mx-auto py-8 px-4">
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-primary">Job Listings</CardTitle>
-          <CardDescription>
-            Filter and browse available job listings
-          </CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-2xl font-bold text-primary">NG Jobs</CardTitle>
+              <CardDescription>
+                Filter and browse available job listings
+              </CardDescription>
+            </div>
+            <div className="text-sm text-muted-foreground flex items-center gap-2">
+              Xi Huang
+              <a 
+                href="https://www.linkedin.com/in/xi-huang-cs/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors font-bold text-[10px] bg-[#0077B5] text-white rounded-sm px-1"
+              >
+                in
+              </a>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
