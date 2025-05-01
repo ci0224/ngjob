@@ -28,10 +28,14 @@ export function filterJobs(jobs: Job[], filters: JobFilters): Job[] {
       return false
     }
 
-    // Job family filter (now supports multiple selections)
+    // Job family filter (now supports multiple selections and case-insensitive matching)
     if (filters.jobFamily && filters.jobFamily.length > 0) {
-      if (!filters.jobFamily.includes(job.job_family)) {
-        return false
+      const jobFamilyLower = job.job_family?.toLowerCase() || '';
+      const hasMatchingFamily = filters.jobFamily.some(family => 
+        jobFamilyLower.includes(family.toLowerCase())
+      );
+      if (!hasMatchingFamily) {
+        return false;
       }
     }
 
