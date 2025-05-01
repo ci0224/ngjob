@@ -36,7 +36,6 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const [locations, setLocations] = useState<string[]>([]);
   const [jobFamilies, setJobFamilies] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   
@@ -45,7 +44,6 @@ export default function JobsPage() {
   
   const [filters, setFilters] = useState<JobFilters>({
     search: "",
-    location: "all",
     country: "all",
     jobFamily: [],
     minExp: "all",
@@ -62,7 +60,6 @@ export default function JobsPage() {
         setFilteredJobs(data);
         
         // Set filter options
-        setLocations(getUniqueValues(data, 'job_location'));
         setJobFamilies(getUniqueValues(data, 'job_family'));
         setSkills(getUniqueSkills(data));
         
@@ -132,7 +129,6 @@ export default function JobsPage() {
   const clearFilters = () => {
     setFilters({
       search: "",
-      location: "all",
       country: "all",
       jobFamily: [],
       minExp: "all",
@@ -169,30 +165,11 @@ export default function JobsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <div className="col-span-1 md:col-span-2 lg:col-span-4">
               <Input
-                placeholder="Search jobs or locations..."
+                placeholder="Search jobs..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
                 className="w-full"
               />
-            </div>
-            
-            <div>
-              <Select
-                value={filters.location}
-                onValueChange={(value) => handleFilterChange("location", value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Locations</SelectItem>
-                  {locations.map((location) => (
-                    <SelectItem key={location} value={location}>
-                      {location}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
             
             <div>
@@ -299,7 +276,6 @@ export default function JobsPage() {
             </Dialog>
             
             {(filters.search || 
-              filters.location || 
               filters.country !== "all" ||
               selectedJobFamilies.length > 0 ||
               filters.minExp !== "all" || 

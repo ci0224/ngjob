@@ -18,11 +18,6 @@ export function filterJobs(jobs: Job[], filters: JobFilters): Job[] {
       }
     }
 
-    // Location filter
-    if (filters.location && filters.location !== 'all' && job.job_location !== filters.location) {
-      return false
-    }
-
     // Country filter
     if (filters.country && filters.country !== 'all' && job.job_country !== filters.country) {
       return false

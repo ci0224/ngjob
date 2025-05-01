@@ -22,7 +22,6 @@ export interface Job {
 
 export interface JobFilters {
   search: string;
-  location: string;
   country: string;
   jobFamily: string[];
   minExp: string;
