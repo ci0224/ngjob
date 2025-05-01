@@ -183,6 +183,7 @@ export default function JobsPage() {
             </div>
             
             <div>
+              <label className="text-sm font-medium mb-2 block">Country</label>
               <Select
                 value={filters.country}
                 onValueChange={(value) => handleFilterChange("country", value)}
@@ -198,6 +199,7 @@ export default function JobsPage() {
             </div>
             
             <div>
+              <label className="text-sm font-medium mb-2 block">Minimum Experience</label>
               <Select
                 value={filters.minExp}
                 onValueChange={(value) => handleFilterChange("minExp", value)}
@@ -219,18 +221,19 @@ export default function JobsPage() {
             </div>
 
             <div>
+              <label className="text-sm font-medium mb-2 block">Your Degree</label>
               <Select
                 value={filters.degree}
                 onValueChange={(value) => handleFilterChange("degree", value)}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Minimum Degree" />
+                  <SelectValue placeholder="Select your degree" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="any">Any Degree</SelectItem>
-                  <SelectItem value="Bachelor">Bachelor&apos;s</SelectItem>
-                  <SelectItem value="Master">Master&apos;s</SelectItem>
-                  <SelectItem value="PhD">PhD</SelectItem>
+                  <SelectItem value="any">No Degree Required</SelectItem>
+                  <SelectItem value="Bachelor">Bachelor&apos;s Degree</SelectItem>
+                  <SelectItem value="Master">Master&apos;s Degree</SelectItem>
+                  <SelectItem value="PhD">PhD Degree</SelectItem>
                 </SelectContent>
               </Select>
             </div>
