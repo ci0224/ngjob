@@ -145,13 +145,6 @@ export default function JobsPage() {
     return `${selectedSkills.length} skills selected`;
   };
 
-  // Used for job family selection display
-  const getJobFamilyText = () => {
-    if (selectedJobFamilies.length === 0) return "Select job families";
-    if (selectedJobFamilies.length === 1) return selectedJobFamilies[0];
-    return `${selectedJobFamilies.length} job families selected`;
-  };
-
   return (
     <main className="container mx-auto py-8 px-4">
       <Card className="mb-8">
@@ -208,40 +201,28 @@ export default function JobsPage() {
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center gap-2 mb-4">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline">
-                  {getJobFamilyText()}
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-h-[80vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Select Job Families</DialogTitle>
-                  <DialogDescription>
-                    Choose job families to filter job listings
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
-                  {jobFamilies.map((family) => (
-                    <div key={family} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`family-${family}`}
-                        checked={selectedJobFamilies.includes(family)}
-                        onCheckedChange={() => toggleJobFamily(family)}
-                      />
-                      <label
-                        htmlFor={`family-${family}`}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {family}
-                      </label>
-                    </div>
-                  ))}
+          <div className="mb-4">
+            <p className="text-sm font-medium mb-2">Job Families</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-[160px] overflow-y-auto p-2 border rounded-md">
+              {jobFamilies.map((family) => (
+                <div key={family} className="flex items-center space-x-2 min-w-[200px]">
+                  <Checkbox
+                    id={`family-${family}`}
+                    checked={selectedJobFamilies.includes(family)}
+                    onCheckedChange={() => toggleJobFamily(family)}
+                  />
+                  <label
+                    htmlFor={`family-${family}`}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 whitespace-nowrap overflow-hidden text-ellipsis"
+                  >
+                    {family}
+                  </label>
                 </div>
-              </DialogContent>
-            </Dialog>
-
+              ))}
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap items-center gap-2 mb-4">
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline">
