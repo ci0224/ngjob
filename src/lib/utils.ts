@@ -59,7 +59,23 @@ export function filterJobs(jobs: Job[], filters: JobFilters): Job[] {
     // Degree filter
     if (filters.degree && filters.degree !== 'any') {
       const jobDegree = job.degree_required || job.degree_preferred;
-      if (!jobDegree || !jobDegree.includes(filters.degree)) {
+      if (!jobDegree) {
+        return true; // If no degree is specified, show the job
+      }
+
+      // Define degree hierarchy
+      const degreeHierarchy = {
+        'none': 0,
+        'Bachelor': 1,
+        'Master': 2,
+        'PhD': 3
+      };
+
+      const selectedDegreeLevel = degreeHierarchy[filters.degree as keyof typeof degreeHierarchy];
+      const jobDegreeLevel = degreeHierarchy[jobDegree as keyof typeof degreeHierarchy] || 0;
+
+      // Show job if its required degree level is less than or equal to the selected degree level
+      if (jobDegreeLevel > selectedDegreeLevel) {
         return false;
       }
     }
