@@ -302,13 +302,11 @@ export default function JobsPage() {
                           <span className="text-muted-foreground line-clamp-1">{job.job_location}</span>
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-medium">Experience</span>
+                          <span className="font-medium">Expected Experience</span>
                           <span className="text-muted-foreground line-clamp-1">
                             {job.min_years_required ? 
                               `${job.min_years_required}+ years` : 
-                              job.min_years_preferred ? 
-                                `${job.min_years_preferred}+ years` : 
-                                "Not specified"}
+                              "Not specified"}
                           </span>
                         </div>
                       </div>
