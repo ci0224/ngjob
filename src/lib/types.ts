@@ -26,4 +26,5 @@ export interface JobFilters {
   jobFamily: string[];
   minExp: string;
   skills: string[];
+  degree: string;
 } 

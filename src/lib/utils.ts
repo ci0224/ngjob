@@ -56,6 +56,14 @@ export function filterJobs(jobs: Job[], filters: JobFilters): Job[] {
       }
     }
 
+    // Degree filter
+    if (filters.degree && filters.degree !== 'any') {
+      const jobDegree = job.degree_required || job.degree_preferred;
+      if (!jobDegree || !jobDegree.includes(filters.degree)) {
+        return false;
+      }
+    }
+
     return true
   })
 }

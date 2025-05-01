@@ -48,6 +48,7 @@ export default function JobsPage() {
     jobFamily: [],
     minExp: "all",
     skills: [],
+    degree: "any",
   });
 
   // Fetch jobs data
@@ -133,6 +134,7 @@ export default function JobsPage() {
       jobFamily: [],
       minExp: "all",
       skills: [],
+      degree: "any",
     });
     setSelectedSkills([]);
     setSelectedJobFamilies([]);
@@ -199,8 +201,25 @@ export default function JobsPage() {
                 </SelectContent>
               </Select>
             </div>
+
+            <div>
+              <Select
+                value={filters.degree}
+                onValueChange={(value) => handleFilterChange("degree", value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Minimum Degree" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Any Degree</SelectItem>
+                  <SelectItem value="Bachelor">Bachelor&apos;s</SelectItem>
+                  <SelectItem value="Master">Master&apos;s</SelectItem>
+                  <SelectItem value="PhD">PhD</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          
+
           <div className="mb-4">
             <p className="text-sm font-medium mb-2">Job Families</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-[160px] overflow-y-auto p-2 border rounded-md">
