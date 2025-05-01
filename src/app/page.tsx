@@ -38,6 +38,7 @@ export default function JobsPage() {
   
   const [companies, setCompanies] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
+  const [countries, setCountries] = useState<string[]>([]);
   const [jobFamilies, setJobFamilies] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   
@@ -47,6 +48,7 @@ export default function JobsPage() {
     search: "",
     company: "all",
     location: "all",
+    country: "all",
     jobFamily: "all",
     minExp: "all",
     skills: [],
@@ -64,6 +66,7 @@ export default function JobsPage() {
         // Set filter options
         setCompanies(getUniqueValues(data, 'company'));
         setLocations(getUniqueValues(data, 'job_location'));
+        setCountries(getUniqueValues(data, 'job_country'));
         setJobFamilies(getUniqueValues(data, 'job_family'));
         setSkills(getUniqueSkills(data));
         
@@ -117,6 +120,7 @@ export default function JobsPage() {
       search: "",
       company: "all",
       location: "all",
+      country: "all",
       jobFamily: "all",
       minExp: "all",
       skills: [],
@@ -183,6 +187,25 @@ export default function JobsPage() {
                   {locations.map((location) => (
                     <SelectItem key={location} value={location}>
                       {location}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Select
+                value={filters.country}
+                onValueChange={(value) => handleFilterChange("country", value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Countries</SelectItem>
+                  {countries.map((country) => (
+                    <SelectItem key={country} value={country}>
+                      {country}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -266,6 +289,7 @@ export default function JobsPage() {
             {(filters.search || 
               filters.company || 
               filters.location || 
+              filters.country ||
               filters.jobFamily || 
               filters.minExp || 
               selectedSkills.length > 0) && (

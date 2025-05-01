@@ -3,6 +3,7 @@ export interface Job {
   company: string;
   job_title: string;
   job_location: string;
+  job_country: string;
   job_family: string;
   degree_fields: string[];
   degree_preferred: string;
@@ -23,6 +24,7 @@ export interface JobFilters {
   search: string;
   company: string;
   location: string;
+  country: string;
   jobFamily: string;
   minExp: string;
   skills: string[];
