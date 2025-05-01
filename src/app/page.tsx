@@ -46,7 +46,7 @@ export default function JobsPage() {
     search: "",
     country: "all",
     jobFamily: [],
-    minExp: "all",
+    minExp: "0",
     skills: [],
     degree: "any",
   });
@@ -132,7 +132,7 @@ export default function JobsPage() {
       search: "",
       country: "all",
       jobFamily: [],
-      minExp: "all",
+      minExp: "0",
       skills: [],
       degree: "any",
     });
@@ -207,6 +207,7 @@ export default function JobsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Any Experience</SelectItem>
+                  <SelectItem value="0">0 Years</SelectItem>
                   <SelectItem value="1">≤ 1 Year</SelectItem>
                   <SelectItem value="2">≤ 2 Years</SelectItem>
                   <SelectItem value="3">≤ 3 Years</SelectItem>
