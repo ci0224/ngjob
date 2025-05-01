@@ -18,19 +18,21 @@ export function filterJobs(jobs: Job[], filters: JobFilters): Job[] {
       }
     }
 
-    // Company filter
-    if (filters.company && filters.company !== 'all' && job.company !== filters.company) {
-      return false
-    }
-
     // Location filter
     if (filters.location && filters.location !== 'all' && job.job_location !== filters.location) {
       return false
     }
 
-    // Job family filter
-    if (filters.jobFamily && filters.jobFamily !== 'all' && job.job_family !== filters.jobFamily) {
+    // Country filter
+    if (filters.country && filters.country !== 'all' && job.job_country !== filters.country) {
       return false
+    }
+
+    // Job family filter (now supports multiple selections)
+    if (filters.jobFamily && filters.jobFamily.length > 0) {
+      if (!filters.jobFamily.includes(job.job_family)) {
+        return false
+      }
     }
 
     // Minimum experience filter

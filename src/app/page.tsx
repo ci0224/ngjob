@@ -36,20 +36,18 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const [companies, setCompanies] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
-  const [countries, setCountries] = useState<string[]>([]);
   const [jobFamilies, setJobFamilies] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedJobFamilies, setSelectedJobFamilies] = useState<string[]>([]);
   
   const [filters, setFilters] = useState<JobFilters>({
     search: "",
-    company: "all",
     location: "all",
     country: "all",
-    jobFamily: "all",
+    jobFamily: [],
     minExp: "all",
     skills: [],
   });
@@ -64,9 +62,7 @@ export default function JobsPage() {
         setFilteredJobs(data);
         
         // Set filter options
-        setCompanies(getUniqueValues(data, 'company'));
         setLocations(getUniqueValues(data, 'job_location'));
-        setCountries(getUniqueValues(data, 'job_country'));
         setJobFamilies(getUniqueValues(data, 'job_family'));
         setSkills(getUniqueSkills(data));
         
@@ -97,6 +93,24 @@ export default function JobsPage() {
     setFilters(prev => ({ ...prev, [field]: value }));
   };
 
+  // Handle job family filter
+  const toggleJobFamily = (family: string) => {
+    setSelectedJobFamilies(prev => {
+      const isSelected = prev.includes(family);
+      const newFamilies = isSelected
+        ? prev.filter(f => f !== family)
+        : [...prev, family];
+      
+      // Update filters with the new job families
+      setFilters(prevFilters => ({
+        ...prevFilters,
+        jobFamily: newFamilies,
+      }));
+      
+      return newFamilies;
+    });
+  };
+
   // Handle skills filter
   const toggleSkill = (skill: string) => {
     setSelectedSkills(prev => {
@@ -118,14 +132,14 @@ export default function JobsPage() {
   const clearFilters = () => {
     setFilters({
       search: "",
-      company: "all",
       location: "all",
       country: "all",
-      jobFamily: "all",
+      jobFamily: [],
       minExp: "all",
       skills: [],
     });
     setSelectedSkills([]);
+    setSelectedJobFamilies([]);
   };
 
   // Used for skill selection display
@@ -133,6 +147,13 @@ export default function JobsPage() {
     if (selectedSkills.length === 0) return "Select skills";
     if (selectedSkills.length === 1) return selectedSkills[0];
     return `${selectedSkills.length} skills selected`;
+  };
+
+  // Used for job family selection display
+  const getJobFamilyText = () => {
+    if (selectedJobFamilies.length === 0) return "Select job families";
+    if (selectedJobFamilies.length === 1) return selectedJobFamilies[0];
+    return `${selectedJobFamilies.length} job families selected`;
   };
 
   return (
@@ -148,30 +169,11 @@ export default function JobsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <div className="col-span-1 md:col-span-2 lg:col-span-4">
               <Input
-                placeholder="Search jobs, companies, or locations..."
+                placeholder="Search jobs or locations..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
                 className="w-full"
               />
-            </div>
-            
-            <div>
-              <Select
-                value={filters.company}
-                onValueChange={(value) => handleFilterChange("company", value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select company" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Companies</SelectItem>
-                  {companies.map((company) => (
-                    <SelectItem key={company} value={company}>
-                      {company}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
             
             <div>
@@ -203,30 +205,7 @@ export default function JobsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Countries</SelectItem>
-                  {countries.map((country) => (
-                    <SelectItem key={country} value={country}>
-                      {country}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <Select
-                value={filters.jobFamily}
-                onValueChange={(value) => handleFilterChange("jobFamily", value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select job family" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Job Families</SelectItem>
-                  {jobFamilies.map((family) => (
-                    <SelectItem key={family} value={family}>
-                      {family}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="US">United States</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -253,6 +232,39 @@ export default function JobsPage() {
           </div>
           
           <div className="flex flex-wrap items-center gap-2 mb-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  {getJobFamilyText()}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Select Job Families</DialogTitle>
+                  <DialogDescription>
+                    Choose job families to filter job listings
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+                  {jobFamilies.map((family) => (
+                    <div key={family} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`family-${family}`}
+                        checked={selectedJobFamilies.includes(family)}
+                        onCheckedChange={() => toggleJobFamily(family)}
+                      />
+                      <label
+                        htmlFor={`family-${family}`}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {family}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline">
@@ -287,11 +299,10 @@ export default function JobsPage() {
             </Dialog>
             
             {(filters.search || 
-              filters.company || 
               filters.location || 
-              filters.country ||
-              filters.jobFamily || 
-              filters.minExp || 
+              filters.country !== "all" ||
+              selectedJobFamilies.length > 0 ||
+              filters.minExp !== "all" || 
               selectedSkills.length > 0) && (
               <Button 
                 variant="outline" 

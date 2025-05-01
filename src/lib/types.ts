@@ -22,10 +22,9 @@ export interface Job {
 
 export interface JobFilters {
   search: string;
-  company: string;
   location: string;
   country: string;
-  jobFamily: string;
+  jobFamily: string[];
   minExp: string;
   skills: string[];
 } 
