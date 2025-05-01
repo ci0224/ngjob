@@ -186,16 +186,16 @@ export default function JobsPage() {
                 onValueChange={(value) => handleFilterChange("minExp", value)}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Min. experience" />
+                  <SelectValue placeholder="Experience" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Any Experience</SelectItem>
-                  <SelectItem value="0">Entry Level</SelectItem>
-                  <SelectItem value="1">1+ Years</SelectItem>
-                  <SelectItem value="3">3+ Years</SelectItem>
-                  <SelectItem value="5">5+ Years</SelectItem>
-                  <SelectItem value="7">7+ Years</SelectItem>
-                  <SelectItem value="10">10+ Years</SelectItem>
+                  <SelectItem value="1">≤ 1 Year</SelectItem>
+                  <SelectItem value="2">≤ 2 Years</SelectItem>
+                  <SelectItem value="3">≤ 3 Years</SelectItem>
+                  <SelectItem value="5">≤ 5 Years</SelectItem>
+                  <SelectItem value="7">≤ 7 Years</SelectItem>
+                  <SelectItem value="10">≤ 10 Years</SelectItem>
                 </SelectContent>
               </Select>
             </div>

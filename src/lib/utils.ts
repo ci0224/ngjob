@@ -34,10 +34,11 @@ export function filterJobs(jobs: Job[], filters: JobFilters): Job[] {
       }
     }
 
-    // Minimum experience filter
+    // Experience filter (now shows maximum years)
     if (filters.minExp && filters.minExp !== 'all') {
-      const minYears = parseInt(filters.minExp)
-      if ((job.min_years_required ?? 0) > minYears) {
+      const maxYears = parseInt(filters.minExp)
+      const jobMinYears = job.min_years_required ?? job.min_years_preferred ?? 0
+      if (jobMinYears > maxYears) {
         return false
       }
     }
